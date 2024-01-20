@@ -4,9 +4,10 @@ AWS.config.update({
 })
 const util = require('../utils/util');
 const bcrypt = require('bcryptjs');
+const generateId = require('../utils/string-util');
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
-const userTable = 'jinmeister-users';
+const userTable = 'user-table';
 
 async function register(userInfo) {
   const name = userInfo.name;
@@ -28,6 +29,7 @@ async function register(userInfo) {
 
   const encryptedPW = bcrypt.hashSync(password.trim(), 10);
   const user = {
+    user_id: generateId.generateId(),
     name: name,
     email: email,
     username: username.toLowerCase().trim(),
@@ -39,7 +41,7 @@ async function register(userInfo) {
     return util.buildResponse(503, { message: 'Server Error. Please try again later.'});
   }
 
-  return util.buildResponse(200, { username: username });
+  return util.buildResponse(200, { message: 'Register Successfully!', username: username });
 }
 
 async function getUser(username) {

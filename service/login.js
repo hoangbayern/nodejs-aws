@@ -7,7 +7,7 @@ const bcrypt = require('bcryptjs');
 const auth = require('../utils/auth');
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
-const userTable = 'jinmeister-users';
+const userTable = 'user-table';
 
 async function login(user) {
   const username = user.username;
@@ -33,6 +33,7 @@ async function login(user) {
   }
   const token = auth.generateToken(userInfo)
   const response = {
+    message: 'Login Successfully!',
     user: userInfo,
     token: token
   }
