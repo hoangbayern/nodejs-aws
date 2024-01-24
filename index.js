@@ -13,6 +13,7 @@ const allLeaveService = require('./service/api-leave/all-leave');
 const getLeaveService = require('./service/api-leave/get-leave');
 const deleteLeaveService = require('./service/api-leave/delete-leave');
 const updateLeaveService = require('./service/api-leave/update-leave');
+const searchLeaveService = require('./service/api-leave/search-leave');
 
 const util = require('./utils/util');
 
@@ -30,6 +31,7 @@ const allLeavePath = '/leave/all_leave';
 const getLeavePath = '/leave/get_leave';
 const deleteLeavePath = '/leave/delete_leave';
 const updateLeavePath = '/leave/update_leave';
+const searchLeavePath = '/leave/search_leave';
 
 exports.handler = async (event) => {
     console.log('Request Event: ', event);
@@ -51,6 +53,9 @@ exports.handler = async (event) => {
         case event.httpMethod === 'GET' && event.path === getLeavePath:
             const leaveId = event.queryStringParameters?.leave_id;
             response = await getLeaveService.getLeave(leaveId);
+            break;
+        case event.httpMethod === 'GET' && event.path === searchLeavePath:
+            response = await searchLeaveService.searchLeave(event);
             break;
         case event.httpMethod === 'POST' && event.path === registerPath:
             const registerBody = JSON.parse(event.body);

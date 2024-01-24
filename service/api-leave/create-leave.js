@@ -4,6 +4,7 @@ AWS.config.update({
 })
 const util = require('../../utils/util');
 const generateId = require('../../utils/string-util');
+const dayjs = require('dayjs');
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 const userTable = 'hoang-UserLeaveTable';
@@ -15,6 +16,7 @@ async function createLeave(leaveInfo) {
   const leave_reason = leaveInfo.leave_reason;
   const author = 'admin';
   const status = 'pending';
+  const created_at = dayjs().format('YYYY-MM-DD');
   if (!user_id || !start_date || !end_date || !leave_reason) {
     return util.buildResponse(401, {
       message: 'All fields are required'
@@ -28,7 +30,8 @@ async function createLeave(leaveInfo) {
     end_date: end_date,
     leave_reason: leave_reason,
     author: author,
-    status: status
+    status: status,
+    created_at: created_at,
   }
 
   const saveLeaveResponse = await saveLeaveUser(leave);
